@@ -1,0 +1,109 @@
+﻿## === Base for .NET Core ===
+bin/
+obj/
+*.dll
+*.exe
+*.app
+*.db
+*.mdb
+*.bak
+*.backup
+*.log
+*.pdb
+*.cache
+*.orig
+*.tmp
+*.log
+
+# Build artifacts (including nested projects)
+**/bin/
+**/obj/
+**/TestResults/
+**/out/
+**/publish/
+
+## === IDE Specific ===
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+
+## === ASP.NET Core Specific ===
+wwwroot/lib/
+wwwroot/dist/
+project.lock.json
+project.fragment.lock.json
+Properties/launchSettings.json
+
+## === Environment Config ===
+.env
+.env.*
+
+## === Node / Frontend Stuff (if any SPA involved) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+## === Paket ===
+.paket/
+paket-files/
+
+## === Coverage ===
+coverage/
+coverage*.json
+lcov.*
+.nyc_output/
+
+## === NuGet ===
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+.nuget/packages/
+
+## === Others ===
+*.dbmdl
+*.DS_Store
+Thumbs.db
+*.tgz
+*.tar.gz
+
+# Local history
+.localhistory/
+
+# User-specific tools
+tools/
+
+# Docker
+*.pid
+*.container
+*.tar
+
+# Logs
+log/
+logs/
+*.log
+
+# ReSharper & Rider
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Test / CI Artifacts
+TestResults/
+.trx
+*.coverage
+*.coverlet.*
+
+# Global cache/settings
+global.json
