@@ -1,24 +1,15 @@
 ﻿using IssueManager.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IssueManager.Infrastructure.Services
 {
-    public class GitLabIssueProvider : IIssueProvider
+    public class GitLabIssueProvider(string token) : IIssueProvider
     {
-        private readonly string _token;
-
-        public GitLabIssueProvider(string token) => _token = token;
-
         public async Task CreateIssueAsync(string repo, string title, string body)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var projectId = Uri.EscapeDataString(repo); // repo = "namespace/project"
             var response = await client.PostAsJsonAsync(
@@ -32,7 +23,7 @@ namespace IssueManager.Infrastructure.Services
         public async Task UpdateIssueAsync(string repo, int issueId, string title, string body)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var projectId = Uri.EscapeDataString(repo);
             var response = await client.PutAsJsonAsync(
@@ -46,7 +37,7 @@ namespace IssueManager.Infrastructure.Services
         public async Task DeleteIssueAsync(string repo, int issueId)
         {
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var projectId = Uri.EscapeDataString(repo);
             var response = await client.DeleteAsync(

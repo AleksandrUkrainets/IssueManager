@@ -1,23 +1,17 @@
 ﻿using IssueManager.Application.DTOs;
 using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IssueManager.Application.Services
 {
     public class IssueService(IIssueProviderFactory factory) : IIssueService
     {
-        private readonly IIssueProviderFactory _factory = factory;
         private IIssueProvider? _issueProvider;
 
         private async Task<bool> EnsureProviderInitializedAsync()
         {
             if (_issueProvider != null) return true;
-            _issueProvider = await _factory.CreateForCurrentUserAsync();
+            _issueProvider = await factory.CreateForCurrentUserAsync();
             return _issueProvider != null;
         }
 

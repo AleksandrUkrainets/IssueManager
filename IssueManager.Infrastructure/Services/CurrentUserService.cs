@@ -4,19 +4,12 @@ using System.Security.Claims;
 
 namespace IssueManager.Infrastructure.Services
 {
-    public class CurrentUserService : ICurrentUserService
+    public class CurrentUserService(IHttpContextAccessor accessor) : ICurrentUserService
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CurrentUserService(IHttpContextAccessor accessor)
-        {
-            _httpContextAccessor = accessor;
-        }
-
-        public string AppUserId => _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        public string AppUserId => accessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
             ?? throw new UnauthorizedAccessException("User ID not found");
 
-        public string Provider => _httpContextAccessor.HttpContext?.User?.FindFirst("provider")?.Value
+        public string Provider => accessor.HttpContext?.User?.FindFirst("provider")?.Value
             ?? throw new UnauthorizedAccessException("Provider not found");
     }
 }

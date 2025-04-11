@@ -10,14 +10,9 @@ namespace IssueManager.Persistance.Security
         string Decrypt(string cipherText);
     }
 
-    public class AesEncryptionService : IEncryptionService
+    public class AesEncryptionService(IConfiguration config) : IEncryptionService
     {
-        private readonly string _key;
-
-        public AesEncryptionService(IConfiguration config)
-        {
-            _key = config["Encryption:Key"]!;
-        }
+        private readonly string _key = config["Encryption:Key"]!;
 
         public string Encrypt(string plainText)
         {

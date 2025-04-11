@@ -1,8 +1,6 @@
 ﻿using IssueManager.Application.Configuration;
 using IssueManager.Application.DTOs;
 using IssueManager.Domain.Interfaces;
-using IssueManager.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,18 +14,9 @@ namespace IssueManager.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OAuthController : ControllerBase
+    public class OAuthController(IOptions<OAuthSettings> settings, IUserCredentialRepository tokenStorage, IConfiguration configuration) : ControllerBase
     {
-        private readonly OAuthSettings _settings;
-        private readonly IUserCredentialRepository _tokenStorage;
-        private readonly IConfiguration _configuration;
-
-        public OAuthController(IOptions<OAuthSettings> settings, IUserCredentialRepository tokenStorage, IConfiguration configuration)
-        {
-            _settings = settings.Value;
-            _tokenStorage = tokenStorage;
-            _configuration = configuration;
-        }
+        private readonly OAuthSettings _settings = settings.Value;
 
         [HttpPost("authUrl")]
         public IActionResult GetAuthUrl([FromBody] AuthUrlRequest request)
@@ -145,7 +134,7 @@ namespace IssueManager.Presentation.Controllers
             }
 
             var jwt = GenerateJwtToken(provider, accessToken, appUserId);
-            await _tokenStorage.SaveCredentialAsync(appUserId, provider, accessToken, jwt);
+            await tokenStorage.SaveCredentialAsync(appUserId, provider, accessToken, jwt);
 
             return Ok(new { token = jwt });
         }
@@ -159,12 +148,12 @@ namespace IssueManager.Presentation.Controllers
                 new Claim(ClaimTypes.NameIdentifier, appUserId)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
