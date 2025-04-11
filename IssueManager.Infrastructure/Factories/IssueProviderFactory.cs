@@ -1,10 +1,14 @@
 ﻿using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IssueManager.Infrastructure.Factories
 {
-    public class IssueProviderFactory(IUserCredentialRepository credentialRepo, ICurrentUserService currentUser) : IIssueProviderFactory
+    public class IssueProviderFactory(
+        IUserCredentialRepository credentialRepo,
+        ICurrentUserService currentUser,
+        IServiceProvider serviceProvider) : IIssueProviderFactory
     {
         public async Task<IIssueProvider?> CreateForCurrentUserAsync()
         {
@@ -16,8 +20,8 @@ namespace IssueManager.Infrastructure.Factories
 
             return provider.ToLowerInvariant() switch
             {
-                "github" => new GitHubIssueProvider(tokens.Value.accessToken),
-                "gitlab" => new GitLabIssueProvider(tokens.Value.accessToken),
+                "github" => ActivatorUtilities.CreateInstance<GitHubIssueProvider>(serviceProvider, tokens.Value.accessToken),
+                "gitlab" => ActivatorUtilities.CreateInstance<GitLabIssueProvider>(serviceProvider, tokens.Value.accessToken),
                 _ => null
             };
         }

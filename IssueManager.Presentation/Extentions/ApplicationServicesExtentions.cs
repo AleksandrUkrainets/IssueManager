@@ -25,6 +25,11 @@ namespace IssueManager.Presentation.Extentions
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IIssueProviderFactory, IssueProviderFactory>();
             services.AddScoped<IIssueService, IssueService>();
+            services.AddScoped<ITokenGenerator, TokenGenerator>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddHttpClient<GitHubIssueProvider>();
+            services.AddHttpClient<GitLabIssueProvider>();
 
             services.AddOpenApi();
 
