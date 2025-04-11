@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace IssueManager.Persistance.Repository
 {
-    public class DbTokenStorageService : ITokenStorageService
+    public class UserCredentialRepository : IUserCredentialRepository
     {
         private readonly AppDbContext _db;
         private readonly IEncryptionService _encryption;
 
-        public DbTokenStorageService(AppDbContext db, IEncryptionService encryption)
+        public UserCredentialRepository(AppDbContext db, IEncryptionService encryption)
         {
             _db = db;
             _encryption = encryption;
         }
 
-        public async Task SaveTokenAsync(string appUserId, string provider, string accessToken, string jwtToken)
+        public async Task SaveCredentialAsync(string appUserId, string provider, string accessToken, string jwtToken)
         {
             var type = Enum.Parse<ProviderType>(provider, ignoreCase: true);
             var encryptedAccess = _encryption.Encrypt(accessToken);
@@ -33,6 +33,7 @@ namespace IssueManager.Persistance.Repository
             {
                 existing.AccessTokenEncrypted = encryptedAccess;
                 existing.JwtTokenEncrypted = encryptedJwt;
+                existing.ModifiedAt = DateTime.UtcNow;
             }
             else
             {
@@ -49,7 +50,7 @@ namespace IssueManager.Persistance.Repository
             await _db.SaveChangesAsync();
         }
 
-        public async Task<(string accessToken, string jwtToken)?> GetTokenAsync(string appUserId, string provider)
+        public async Task<(string accessToken, string jwtToken)?> GetCredentialAsync(string appUserId, string provider)
         {
             var type = Enum.Parse<ProviderType>(provider, ignoreCase: true);
             var record = await _db.UserCredentials.FirstOrDefaultAsync(x => x.AppUserId == appUserId && x.Provider == type);

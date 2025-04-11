@@ -9,51 +9,48 @@ using System.Threading.Tasks;
 
 namespace IssueManager.Infrastructure.Services
 {
-    public class BitbucketIssueService : IIssueService
+    public class GitLabIssueProvider : IIssueProvider
     {
         private readonly string _token;
 
-        public BitbucketIssueService(string token) => _token = token;
+        public GitLabIssueProvider(string token) => _token = token;
 
-        public async Task CreateIssueAsync(string userId, string provider, string repo, string title, string body)
+        public async Task CreateIssueAsync(string repo, string title, string body)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
+            var projectId = Uri.EscapeDataString(repo); // repo = "namespace/project"
             var response = await client.PostAsJsonAsync(
-                $"https://api.bitbucket.org/2.0/repositories/{repo}/issues",
-                new
-                {
-                    title,
-                    content = new { raw = body }
-                });
+                $"https://gitlab.com/api/v4/projects/{projectId}/issues",
+                new { title, description = body }
+            );
 
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task UpdateIssueAsync(string userId, string provider, string repo, int issueId, string title, string body)
+        public async Task UpdateIssueAsync(string repo, int issueId, string title, string body)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
+            var projectId = Uri.EscapeDataString(repo);
             var response = await client.PutAsJsonAsync(
-                $"https://api.bitbucket.org/2.0/repositories/{repo}/issues/{issueId}",
-                new
-                {
-                    title,
-                    content = new { raw = body }
-                });
+                $"https://gitlab.com/api/v4/projects/{projectId}/issues/{issueId}",
+                new { title, description = body }
+            );
 
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteIssueAsync(string userId, string provider, string repo, int issueId)
+        public async Task DeleteIssueAsync(string repo, int issueId)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
 
+            var projectId = Uri.EscapeDataString(repo);
             var response = await client.DeleteAsync(
-                $"https://api.bitbucket.org/2.0/repositories/{repo}/issues/{issueId}"
+                $"https://gitlab.com/api/v4/projects/{projectId}/issues/{issueId}"
             );
 
             response.EnsureSuccessStatusCode();

@@ -1,6 +1,8 @@
 ﻿using IssueManager.Application.Configuration;
-using IssueManager.Application.Factories;
+using IssueManager.Application.Interfaces;
+using IssueManager.Application.Services;
 using IssueManager.Domain.Interfaces;
+using IssueManager.Infrastructure.Factories;
 using IssueManager.Infrastructure.Services;
 using IssueManager.Persistance;
 using IssueManager.Persistance.Repository;
@@ -62,9 +64,14 @@ namespace IssueManager.Presentation
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnectionString"))
             );
 
-            builder.Services.AddScoped<IssueServiceFactory>();
+            builder.Services.AddScoped<IssueProviderFactory>();
             builder.Services.AddScoped<IEncryptionService, AesEncryptionService>();
-            builder.Services.AddScoped<ITokenStorageService, DbTokenStorageService>();
+            builder.Services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
+            builder.Services.AddScoped<IIssueService, IssueService>();
+            builder.Services.AddScoped<IIssueProviderFactory, IssueProviderFactory>();
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

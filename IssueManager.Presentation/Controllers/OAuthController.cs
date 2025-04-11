@@ -19,10 +19,10 @@ namespace IssueManager.Presentation.Controllers
     public class OAuthController : ControllerBase
     {
         private readonly OAuthSettings _settings;
-        private readonly ITokenStorageService _tokenStorage;
+        private readonly IUserCredentialRepository _tokenStorage;
         private readonly IConfiguration _configuration;
 
-        public OAuthController(IOptions<OAuthSettings> settings, ITokenStorageService tokenStorage, IConfiguration configuration)
+        public OAuthController(IOptions<OAuthSettings> settings, IUserCredentialRepository tokenStorage, IConfiguration configuration)
         {
             _settings = settings.Value;
             _tokenStorage = tokenStorage;
@@ -30,7 +30,7 @@ namespace IssueManager.Presentation.Controllers
         }
 
         [HttpPost("authUrl")]
-        public IActionResult GetAuthUrl([FromBody] SignInRequest request)
+        public IActionResult GetAuthUrl([FromBody] AuthUrlRequest request)
         {
             if (!_settings.Providers.TryGetValue(request.Provider.ToLower(), out var config))
                 return BadRequest("Unsupported provider");
@@ -145,7 +145,7 @@ namespace IssueManager.Presentation.Controllers
             }
 
             var jwt = GenerateJwtToken(provider, accessToken, appUserId);
-            await _tokenStorage.SaveTokenAsync(appUserId, provider, accessToken, jwt);
+            await _tokenStorage.SaveCredentialAsync(appUserId, provider, accessToken, jwt);
 
             return Ok(new { token = jwt });
         }

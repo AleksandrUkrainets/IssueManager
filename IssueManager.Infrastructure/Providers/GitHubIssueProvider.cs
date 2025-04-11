@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace IssueManager.Infrastructure.Services
 {
-    public class GitHubIssueService : IIssueService
+    public class GitHubIssueProvider : IIssueProvider
     {
         private readonly string _token;
-        public GitHubIssueService(string token) => _token = token;
+        public GitHubIssueProvider(string token) => _token = token;
 
-        public async Task CreateIssueAsync(string userId, string provider, string repo, string title, string body)
+        public async Task CreateIssueAsync(string repo, string title, string body)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -24,7 +24,7 @@ namespace IssueManager.Infrastructure.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task UpdateIssueAsync(string userId, string provider, string repo, int issueId, string title, string body)
+        public async Task UpdateIssueAsync(string repo, int issueId, string title, string body)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -34,7 +34,7 @@ namespace IssueManager.Infrastructure.Services
             response.EnsureSuccessStatusCode();
         }
 
-        public async Task DeleteIssueAsync(string userId, string provider, string repo, int issueId)
+        public async Task DeleteIssueAsync(string repo, int issueId)
         {
             await Task.CompletedTask;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IssueManager.Application.DTOs
 {
-    public class SignInRequest
+    public class AuthUrlRequest
     {
         public string Provider { get; set; } = string.Empty;
     }

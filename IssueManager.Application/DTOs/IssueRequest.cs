@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IssueManager.Application.Services
+namespace IssueManager.Application.DTOs
 {
     public class IssueRequest
     {

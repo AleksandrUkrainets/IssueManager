@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IssueManager.Domain\IssueManager.Domain.csproj" />
-    <ProjectReference Include="..\IssueManager.Infrastructure\IssueManager.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
