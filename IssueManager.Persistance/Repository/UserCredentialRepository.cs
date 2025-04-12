@@ -39,13 +39,13 @@ namespace IssueManager.Persistance.Repository
         public async Task<(string accessToken, string jwtToken)?> GetCredentialAsync(string appUserId, string provider)
         {
             var type = Enum.Parse<ProviderType>(provider, ignoreCase: true);
-            var record = await db.UserCredentials.FirstOrDefaultAsync(x => x.AppUserId == appUserId && x.Provider == type);
+            var userCredentialResult = await db.UserCredentials.FirstOrDefaultAsync(x => x.AppUserId == appUserId && x.Provider == type);
 
-            if (record == null) return null;
+            if (userCredentialResult == null) return null;
 
             return (
-                encryption.Decrypt(record.AccessTokenEncrypted),
-                encryption.Decrypt(record.JwtTokenEncrypted)
+                encryption.Decrypt(userCredentialResult.AccessTokenEncrypted),
+                encryption.Decrypt(userCredentialResult.JwtTokenEncrypted)
             );
         }
     }
