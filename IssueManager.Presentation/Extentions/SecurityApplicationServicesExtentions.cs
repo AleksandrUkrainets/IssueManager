@@ -5,7 +5,7 @@ using System.Text;
 
 namespace IssueManager.Presentation.Extentions
 {
-    public static class SecurityApplicationServices
+    public static class SecurityApplicationServicesExtentions
     {
         public static IServiceCollection AddSecurityApplicationServices(this IServiceCollection services, IConfigurationManager configuration)
         {

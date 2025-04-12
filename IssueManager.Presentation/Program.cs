@@ -1,4 +1,6 @@
 ﻿using IssueManager.Presentation.Extentions;
+using IssueManager.Presentation.Middlewares;
+using Serilog;
 
 namespace IssueManager.Presentation
 {
@@ -6,24 +8,42 @@ namespace IssueManager.Presentation
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddApplicationServices(builder.Configuration);
-            builder.Services.AddSecurityApplicationServices(builder.Configuration);
-
-            var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
+            try
             {
-                app.MapOpenApi();
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                Log.Information("Starting up the app");
+                var builder = WebApplication.CreateBuilder(args);
 
-            app.UseHttpsRedirection();
-            app.UseAuthentication();
-            app.UseAuthorization();
-            app.MapControllers();
-            app.Run();
+                builder.Host.UseSerilog((context, configuration) =>
+                    configuration.ReadFrom.Configuration(context.Configuration));
+
+                builder.Services.AddApplicationServices(builder.Configuration);
+                builder.Services.AddSecurityApplicationServices(builder.Configuration);
+                builder.Services.AddLoggingApplicationServices();
+
+                var app = builder.Build();
+                app.UseMiddleware<LoggingMiddleware>();
+
+                if (app.Environment.IsDevelopment())
+                {
+                    app.MapOpenApi();
+                    app.UseSwagger();
+                    app.UseSwaggerUI();
+                }
+
+                app.UseHttpsRedirection();
+                app.UseAuthentication();
+                app.UseAuthorization();
+                app.MapControllers();
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "App terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }
