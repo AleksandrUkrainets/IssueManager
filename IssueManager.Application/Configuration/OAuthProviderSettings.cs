@@ -13,5 +13,9 @@
         public required string Scope { get; set; }
 
         public required string RedirectUri { get; set; }
+
+        public required string ApiBaseUrl { get; set; }
+
+        public required string BaseUrl { get; set; }
     }
 }

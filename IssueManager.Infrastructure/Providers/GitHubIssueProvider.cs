@@ -1,31 +1,29 @@
 ﻿using IssueManager.Domain.Interfaces;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
+using IssueManager.Infrastructure.Clients;
 
 namespace IssueManager.Infrastructure.Services
 {
     public class GitHubIssueProvider : IIssueProvider
     {
-        private readonly HttpClient _client;
+        private readonly IGitHubApiClient _client;
+        private readonly string _authToken;
 
-        public GitHubIssueProvider(HttpClient client, string token)
+        public GitHubIssueProvider(IGitHubApiClient client, string accessToken)
         {
             _client = client;
-            _client.BaseAddress = new Uri("https://api.github.com/");
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            _client.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
+            _authToken = $"Bearer {accessToken}";
         }
 
         public async Task CreateIssueAsync(string repo, string title, string body)
         {
-            var response = await _client.PostAsJsonAsync($"repos/{repo}/issues", new { title, body });
-            response.EnsureSuccessStatusCode();
+            var parts = repo.Split('/');
+            await _client.CreateIssueAsync(parts[0], parts[1], new { title, body }, _authToken);
         }
 
         public async Task UpdateIssueAsync(string repo, int issueId, string title, string body)
         {
-            var response = await _client.PatchAsJsonAsync($"repos/{repo}/issues/{issueId}", new { title, body });
-            response.EnsureSuccessStatusCode();
+            var parts = repo.Split('/');
+            await _client.UpdateIssueAsync(parts[0], parts[1], issueId, new { title, body }, _authToken);
         }
 
         public Task DeleteIssueAsync(string repo, int issueId) => Task.CompletedTask;

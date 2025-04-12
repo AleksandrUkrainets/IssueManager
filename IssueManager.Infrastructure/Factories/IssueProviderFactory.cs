@@ -1,5 +1,6 @@
 ﻿using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
+using IssueManager.Infrastructure.Clients;
 using IssueManager.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +22,7 @@ namespace IssueManager.Infrastructure.Factories
             return provider.ToLowerInvariant() switch
             {
                 "github" => ActivatorUtilities.CreateInstance<GitHubIssueProvider>(serviceProvider, tokens.Value.accessToken),
+
                 "gitlab" => ActivatorUtilities.CreateInstance<GitLabIssueProvider>(serviceProvider, tokens.Value.accessToken),
                 _ => null
             };
