@@ -1,5 +1,4 @@
-﻿
-namespace IssueManager.Domain.Interfaces
+﻿namespace IssueManager.Domain.Interfaces
 {
     public interface IUserCredentialRepository
     {

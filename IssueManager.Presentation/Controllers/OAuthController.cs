@@ -1,5 +1,4 @@
-﻿using IssueManager.Application.DTOs;
-using IssueManager.Application.Interfaces;
+﻿using IssueManager.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueManager.Presentation.Controllers

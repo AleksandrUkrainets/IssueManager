@@ -1,9 +1,7 @@
 ﻿using IssueManager.Application.Configuration;
-using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 using Microsoft.Extensions.Options;
-using Refit;
 
 namespace IssueManager.Infrastructure.Services.OAuth
 {

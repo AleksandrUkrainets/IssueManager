@@ -1,24 +1,13 @@
 ﻿using IssueManager.Application.Configuration;
-using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 using Microsoft.Extensions.Options;
-using Refit;
 
 namespace IssueManager.Infrastructure.Services.OAuth
 {
-    public class GitLabOAuthProvider : IOAuthProvider
+    public class GitLabOAuthProvider(IOptions<OAuthSettings> settings, IGitLabApiClient apiClient, IGitLabOAuthClient oAuthClient) : IOAuthProvider
     {
-        private readonly OAuthProviderSettings _config;
-        private readonly IGitLabApiClient _apiClient;
-        private readonly IGitLabOAuthClient _oAuthClient;
-
-        public GitLabOAuthProvider(IOptions<OAuthSettings> settings, IGitLabApiClient apiClient, IGitLabOAuthClient oAuthClient)
-        {
-            _config = settings.Value.Providers["gitlab"];
-            _apiClient = apiClient;
-            _oAuthClient = oAuthClient;
-        }
+        private readonly OAuthProviderSettings _config = settings.Value.Providers["gitlab"];
 
         public string GetAuthorizationUrl()
         {
@@ -39,7 +28,7 @@ namespace IssueManager.Infrastructure.Services.OAuth
         {
             try
             {
-                var response = await _oAuthClient.ExchangeCodeForTokenAsync(new Dictionary<string, string>
+                var response = await oAuthClient.ExchangeCodeForTokenAsync(new Dictionary<string, string>
                 {
                     { "client_id", _config.ClientId },
                     { "client_secret", _config.ClientSecret },
@@ -60,7 +49,7 @@ namespace IssueManager.Infrastructure.Services.OAuth
         {
             try
             {
-                var user = await _apiClient.GetUserAsync($"Bearer {accessToken}");
+                var user = await apiClient.GetUserAsync($"Bearer {accessToken}");
                 return user.Id.ToString();
             }
             catch

@@ -1,31 +1,31 @@
-﻿using IssueManager.Domain.Interfaces;
+﻿using AutoMapper;
+using IssueManager.Application.DTOs;
+using IssueManager.Application.Interfaces;
+using IssueManager.Domain.Entities.GitHub;
+using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 
 namespace IssueManager.Infrastructure.Services
 {
-    public class GitHubIssueProvider : IIssueProvider
+    public class GitHubIssueProvider(IGitHubApiClient client, IMapper mapper, string accessToken) : IIssueProvider
     {
-        private readonly IGitHubApiClient _client;
-        private readonly string _authToken;
+        private readonly string _authToken = $"Bearer {accessToken}";
 
-        public GitHubIssueProvider(IGitHubApiClient client, string accessToken)
-        {
-            _client = client;
-            _authToken = $"Bearer {accessToken}";
-        }
-
-        public async Task CreateIssueAsync(string repo, string title, string body)
+        public async Task<IssueDto> CreateIssueAsync(string repo, string title, string body)
         {
             var parts = repo.Split('/');
-            await _client.CreateIssueAsync(parts[0], parts[1], new { title, body }, _authToken);
+            var issue = await client.CreateIssueAsync(parts[0], parts[1], new { title, body }, _authToken);
+            return mapper.Map<IssueDto>(issue);
         }
 
-        public async Task UpdateIssueAsync(string repo, int issueId, string title, string body)
+        public async Task<IssueDto> UpdateIssueAsync(string repo, int issueId, string title, string body)
         {
             var parts = repo.Split('/');
-            await _client.UpdateIssueAsync(parts[0], parts[1], issueId, new { title, body }, _authToken);
+            var issue = await client.UpdateIssueAsync(parts[0], parts[1], issueId, new { title, body }, _authToken);
+            return mapper.Map<IssueDto>(issue);
         }
 
-        public Task DeleteIssueAsync(string repo, int issueId) => Task.CompletedTask;
+        public Task<bool> DeleteIssueAsync(string repo, int issueId) => Task.FromResult(false);
     }
+
 }

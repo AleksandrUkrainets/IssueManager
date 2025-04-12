@@ -1,12 +1,5 @@
-﻿using IssueManager.Application.Configuration;
-using IssueManager.Application.DTOs;
-using IssueManager.Application.Interfaces;
+﻿using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Net.Http;
 
 namespace IssueManager.Application.Services
 {

@@ -26,5 +26,4 @@ namespace IssueManager.Presentation
             app.Run();
         }
     }
-
 }

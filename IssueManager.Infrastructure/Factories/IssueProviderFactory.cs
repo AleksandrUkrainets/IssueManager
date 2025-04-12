@@ -1,6 +1,5 @@
 ﻿using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
-using IssueManager.Infrastructure.Clients;
 using IssueManager.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 

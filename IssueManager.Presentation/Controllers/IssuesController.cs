@@ -13,28 +13,22 @@ namespace IssueManager.Presentation.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateIssue([FromBody] IssueRequest request)
         {
-            var result = await issueService.CreateIssueAsync(request);
-            if (!result) return Unauthorized();
-
-            return Ok("Issue created");
+            var issue = await issueService.CreateIssueAsync(request);
+            return issue is null ? NotFound() : Ok(issue);
         }
 
         [HttpPut("update")]
         public async Task<IActionResult> UpdateIssue([FromBody] IssueUpdateRequest request)
         {
-            var result = await issueService.UpdateIssueAsync(request);
-            if (!result) return Unauthorized();
-
-            return Ok("Issue updated");
+            var issue = await issueService.UpdateIssueAsync(request);
+            return issue is null ? NotFound() : Ok(issue);
         }
 
         [HttpDelete("delete")]
         public async Task<IActionResult> DeleteIssue([FromQuery] string repo, [FromQuery] int issueId)
         {
             var result = await issueService.DeleteIssueAsync(repo, issueId);
-            if (!result) return Unauthorized();
-
-            return Ok("Issue deleted (if supported by provider)");
+            return result ? Ok(new { isDeleted = result }) : NotFound(new { isDeleted = result });
         }
     }
 }

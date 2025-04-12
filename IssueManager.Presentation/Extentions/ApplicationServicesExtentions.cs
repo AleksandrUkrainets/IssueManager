@@ -23,7 +23,7 @@ namespace IssueManager.Presentation.Extentions
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnectionString")));
-
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IEncryptionService, AesEncryptionService>();
             services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
             services.AddHttpContextAccessor();
@@ -36,9 +36,6 @@ namespace IssueManager.Presentation.Extentions
             services.AddScoped<GitLabOAuthProvider>();
             services.AddScoped<IOAuthProviderFactory, OAuthProviderFactory>();
 
-            //services.AddHttpClient<GitHubIssueProvider>();
-            //services.AddHttpClient<GitLabIssueProvider>();
-
             services.AddOpenApi();
 
             services.AddControllers().AddJsonOptions(options =>
@@ -46,7 +43,12 @@ namespace IssueManager.Presentation.Extentions
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower;
             });
-
+            services.AddSingleton(new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+                DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+                PropertyNameCaseInsensitive = true
+            });
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(opt =>
@@ -79,7 +81,20 @@ namespace IssueManager.Presentation.Extentions
                 });
             });
 
-            services.AddRefitClient<IGitHubOAuthClient>()
+
+            var serializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+                DictionaryKeyPolicy = JsonNamingPolicy.SnakeCaseLower,
+                PropertyNameCaseInsensitive = true
+            };
+            var refitSettings = new RefitSettings
+            {
+                ContentSerializer = new SystemTextJsonContentSerializer(serializerOptions)
+            };
+
+
+            services.AddRefitClient<IGitHubOAuthClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
                     var settings = sp.GetRequiredService<IOptions<OAuthSettings>>().Value;
@@ -87,7 +102,7 @@ namespace IssueManager.Presentation.Extentions
                     c.BaseAddress = new Uri(githubConfig.BaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
                 });
-            services.AddRefitClient<IGitHubApiClient>()
+            services.AddRefitClient<IGitHubApiClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
                     var settings = sp.GetRequiredService<IOptions<OAuthSettings>>().Value;
@@ -96,7 +111,7 @@ namespace IssueManager.Presentation.Extentions
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
                 });
 
-            services.AddRefitClient<IGitLabApiClient>()
+            services.AddRefitClient<IGitLabApiClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
                     var settings = sp.GetRequiredService<IOptions<OAuthSettings>>().Value;
@@ -104,7 +119,7 @@ namespace IssueManager.Presentation.Extentions
                     c.BaseAddress = new Uri(gitlabConfig.ApiBaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
                 });
-            services.AddRefitClient<IGitLabOAuthClient>()
+            services.AddRefitClient<IGitLabOAuthClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
                     var settings = sp.GetRequiredService<IOptions<OAuthSettings>>().Value;
