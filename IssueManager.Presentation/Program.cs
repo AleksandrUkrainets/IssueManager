@@ -15,11 +15,13 @@ namespace IssueManager.Presentation
                 Log.Information("Starting up the app");
                 var builder = WebApplication.CreateBuilder(args);
 
-                builder.WebHost.ConfigureKestrel(options =>
+                if (builder.Environment.IsProduction())
                 {
-                    options.ListenAnyIP(8080);
-                });
-
+                    builder.WebHost.ConfigureKestrel(options =>
+                    {
+                        options.ListenAnyIP(8080);
+                    });
+                }
 
                 builder.Host.UseSerilog((context, configuration) =>
                     configuration.ReadFrom.Configuration(context.Configuration));
