@@ -1,5 +1,7 @@
-﻿using IssueManager.Presentation.Extentions;
+﻿using IssueManager.Persistance;
+using IssueManager.Presentation.Extentions;
 using IssueManager.Presentation.Middlewares;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace IssueManager.Presentation
@@ -27,6 +29,11 @@ namespace IssueManager.Presentation
                 builder.Services.AddLoggingApplicationServices();
 
                 var app = builder.Build();
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                    dbContext.Database.Migrate();
+                }
                 app.UseMiddleware<LoggingMiddleware>();
 
                 if (app.Environment.IsDevelopment())
