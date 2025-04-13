@@ -11,11 +11,11 @@ namespace IssueManager.Infrastructure.Clients
         [Post("/api/v4/projects/{projectId}/issues")]
         Task<GitLabIssue> CreateIssueAsync(string projectId, [Body] object issue, [Header("Authorization")] string authHeader);
 
-        [Put("/api/v4/projects/{projectId}/issues/{issueId}")]
-        Task<GitLabIssue> UpdateIssueAsync(string projectId, int issueId, [Body] object issue, [Header("Authorization")] string authHeader);
+        [Put("/api/v4/projects/{projectId}/issues/{issueNumber}")]
+        Task<GitLabIssue> UpdateIssueAsync(string projectId, int issueNumber, [Body] object issue, [Header("Authorization")] string authHeader);
 
-        [Delete("/api/v4/projects/{projectId}/issues/{issueId}")]
-        Task<ApiResponse<dynamic>> DeleteIssueAsync(string projectId, int issueId, [Header("Authorization")] string authHeader);
+        [Delete("/api/v4/projects/{projectId}/issues/{issueNumber}")]
+        Task<ApiResponse<dynamic>> DeleteIssueAsync(string projectId, int issueNumber, [Header("Authorization")] string authHeader);
 
     }
 }

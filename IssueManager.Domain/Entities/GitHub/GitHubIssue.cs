@@ -2,7 +2,7 @@
 {
     public class GitHubIssue
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         public string? NodeId { get; set; }
 
@@ -18,7 +18,7 @@
 
         public string? HtmlUrl { get; set; }
 
-        public long Number { get; set; }
+        public long? Number { get; set; }
 
         public string? State { get; set; }
 
@@ -36,11 +36,11 @@
 
         public GitHubMilestone? Milestone { get; set; }
 
-        public bool Locked { get; set; }
+        public bool? Locked { get; set; }
 
         public string? ActiveLockReason { get; set; }
 
-        public long Comments { get; set; }
+        public long? Comments { get; set; }
 
         public GitHubPullRequest? PullRequest { get; set; }
 

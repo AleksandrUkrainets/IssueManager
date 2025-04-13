@@ -11,7 +11,6 @@ namespace IssueManager.Tests.Services
     public class IssueServiceTests
     {
         private readonly Mock<IIssueProviderFactory> _factoryMock = new();
-        private readonly Mock<IMapper> _mapperMock = new();
         private readonly Mock<ILogger<IssueService>> _loggerMock = new();
         private readonly FakeIssueProvider _fakeProvider = new();
 
@@ -25,7 +24,7 @@ namespace IssueManager.Tests.Services
         private readonly IssueUpdateRequest _updateRequest = new()
         {
             Repo = "user/repo",
-            IssueId = 1,
+            IssueNumber = 1,
             Title = "Updated Title",
             Body = "Updated Body"
         };
@@ -35,7 +34,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync(_fakeProvider);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.CreateIssueAsync(_createRequest);
 
             Assert.NotNull(result);
@@ -48,7 +47,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync((IIssueProvider?)null);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.CreateIssueAsync(_createRequest);
 
             Assert.Null(result);
@@ -60,7 +59,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync(_fakeProvider);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.UpdateIssueAsync(_updateRequest);
 
             Assert.NotNull(result);
@@ -73,7 +72,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync((IIssueProvider?)null);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.UpdateIssueAsync(_updateRequest);
 
             Assert.Null(result);
@@ -85,7 +84,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync(_fakeProvider);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.DeleteIssueAsync("user/repo", 1);
 
             Assert.True(result);
@@ -97,7 +96,7 @@ namespace IssueManager.Tests.Services
         {
             _factoryMock.Setup(f => f.CreateForCurrentUserAsync()).ReturnsAsync((IIssueProvider?)null);
 
-            var service = new IssueService(_factoryMock.Object, _mapperMock.Object, _loggerMock.Object);
+            var service = new IssueService(_factoryMock.Object, _loggerMock.Object);
             var result = await service.DeleteIssueAsync("user/repo", 1);
 
             Assert.False(result);

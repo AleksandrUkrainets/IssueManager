@@ -23,24 +23,24 @@ namespace IssueManager.Infrastructure.Services
 
         public async Task<IssueDto> CreateIssueAsync(string repo, string title, string body)
         {
-            var projectId = Uri.EscapeDataString(repo);
+            var projectId = repo;
             var issue = await _client.CreateIssueAsync(projectId, new { title, description = body }, _authToken);
 
             return _mapper.Map<IssueDto>(issue);
         }
 
-        public async Task<IssueDto> UpdateIssueAsync(string repo, int issueId, string title, string body)
+        public async Task<IssueDto> UpdateIssueAsync(string repo, int issueNumber, string title, string body)
         {
-            var projectId = Uri.EscapeDataString(repo);
-            var issue = await _client.UpdateIssueAsync(projectId, issueId, new { title, description = body }, _authToken);
+            var projectId = repo;
+            var issue = await _client.UpdateIssueAsync(projectId, issueNumber, new { title, description = body }, _authToken);
 
             return _mapper.Map<IssueDto>(issue);
         }
 
-        public async Task<bool> DeleteIssueAsync(string repo, int issueId)
+        public async Task<bool> DeleteIssueAsync(string repo, int issueNumber)
         {
-            var projectId = Uri.EscapeDataString(repo);
-            var result = await _client.DeleteIssueAsync(projectId, issueId, _authToken);
+            var projectId = repo;
+            var result = await _client.DeleteIssueAsync(projectId, issueNumber, _authToken);
 
             return result.IsSuccessStatusCode;
         }

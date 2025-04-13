@@ -6,7 +6,6 @@ namespace IssueManager.Infrastructure.Clients
     {
         [Post("/login/oauth/access_token")]
         [Headers("Accept: application/json")]
-        Task<Dictionary<string, string>> ExchangeCodeForTokenAsync(
-        [Body(BodySerializationMethod.UrlEncoded)] Dictionary<string, string> request);
+        Task<Dictionary<string, string>> ExchangeCodeForTokenAsync([Body(BodySerializationMethod.UrlEncoded)] Dictionary<string, string> request);
     }
 }

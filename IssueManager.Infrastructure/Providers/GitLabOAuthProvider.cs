@@ -37,7 +37,7 @@ namespace IssueManager.Infrastructure.Services.OAuth
                     { "grant_type", "authorization_code" }
                 });
 
-                return response.TryGetValue("access_token", out var token) ? token : null;
+                return response.AccessToken ?? null;
             }
             catch
             {

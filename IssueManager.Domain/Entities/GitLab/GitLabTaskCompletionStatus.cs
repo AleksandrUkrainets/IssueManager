@@ -2,8 +2,8 @@
 {
     public class GitLabTaskCompletionStatus
     {
-        public int Count { get; set; }
+        public int? Count { get; set; }
 
-        public int CompletedCount { get; set; }
+        public int? CompletedCount { get; set; }
     }
 }

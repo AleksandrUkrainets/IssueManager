@@ -36,6 +36,6 @@
 
         public string? Type { get; set; }
 
-        public bool SiteAdmin { get; set; }
+        public bool? SiteAdmin { get; set; }
     }
 }

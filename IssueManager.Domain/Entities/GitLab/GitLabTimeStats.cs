@@ -2,9 +2,9 @@
 {
     public class GitLabTimeStats
     {
-        public int TimeEstimate { get; set; }
+        public int? TimeEstimate { get; set; }
 
-        public int TotalTimeSpent { get; set; }
+        public int? TotalTimeSpent { get; set; }
 
         public string? HumanTimeEstimate { get; set; }
 

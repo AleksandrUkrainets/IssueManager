@@ -4,6 +4,7 @@ using IssueManager.Application.Services;
 using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 using IssueManager.Infrastructure.Factories;
+using IssueManager.Infrastructure.Handlers;
 using IssueManager.Infrastructure.Services;
 using IssueManager.Infrastructure.Services.OAuth;
 using IssueManager.Persistance;
@@ -35,6 +36,7 @@ namespace IssueManager.Presentation.Extentions
             services.AddScoped<GitHubOAuthProvider>();
             services.AddScoped<GitLabOAuthProvider>();
             services.AddScoped<IOAuthProviderFactory, OAuthProviderFactory>();
+            services.AddScoped<RefitLoggingHandler>();
 
             services.AddOpenApi();
 
@@ -101,7 +103,9 @@ namespace IssueManager.Presentation.Extentions
                     var githubConfig = settings.Providers["github"];
                     c.BaseAddress = new Uri(githubConfig.BaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
-                });
+                })
+                .AddHttpMessageHandler<RefitLoggingHandler>();
+
             services.AddRefitClient<IGitHubApiClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
@@ -109,7 +113,8 @@ namespace IssueManager.Presentation.Extentions
                     var githubConfig = settings.Providers["github"];
                     c.BaseAddress = new Uri(githubConfig.ApiBaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
-                });
+                })
+                .AddHttpMessageHandler<RefitLoggingHandler>();
 
             services.AddRefitClient<IGitLabApiClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
@@ -118,7 +123,9 @@ namespace IssueManager.Presentation.Extentions
                     var gitlabConfig = settings.Providers["gitlab"];
                     c.BaseAddress = new Uri(gitlabConfig.ApiBaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
-                });
+                })
+                .AddHttpMessageHandler<RefitLoggingHandler>();
+
             services.AddRefitClient<IGitLabOAuthClient>(refitSettings)
                 .ConfigureHttpClient((sp, c) =>
                 {
@@ -126,7 +133,8 @@ namespace IssueManager.Presentation.Extentions
                     var gitlabConfig = settings.Providers["gitlab"];
                     c.BaseAddress = new Uri(gitlabConfig.BaseUrl);
                     c.DefaultRequestHeaders.UserAgent.ParseAdd("IssueManagerApp");
-                });
+                })
+                .AddHttpMessageHandler<RefitLoggingHandler>();
 
             return services;
         }

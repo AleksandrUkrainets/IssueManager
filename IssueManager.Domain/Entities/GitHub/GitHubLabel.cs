@@ -2,7 +2,7 @@
 {
     public class GitHubLabel
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
 
         public string? NodeId { get; set; }
 
@@ -14,6 +14,6 @@
 
         public string? Color { get; set; }
 
-        public bool Default { get; set; }
+        public bool? Default { get; set; }
     }
 }

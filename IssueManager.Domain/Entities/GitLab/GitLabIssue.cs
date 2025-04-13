@@ -14,7 +14,7 @@ namespace IssueManager.Domain.Entities.GitLab
 
         public string? State { get; set; }
 
-        public int Iid { get; set; }
+        public int? Iid { get; set; }
 
         public List<GitLabUser>? Assignees { get; set; }
 
@@ -24,11 +24,11 @@ namespace IssueManager.Domain.Entities.GitLab
 
         public List<string>? Labels { get; set; }
 
-        public int Upvotes { get; set; }
+        public int? Upvotes { get; set; }
 
-        public int Downvotes { get; set; }
+        public int? Downvotes { get; set; }
 
-        public int MergeRequestsCount { get; set; }
+        public int? MergeRequestsCount { get; set; }
 
         public string? Title { get; set; }
 
@@ -40,13 +40,13 @@ namespace IssueManager.Domain.Entities.GitLab
 
         public GitLabUser? ClosedBy { get; set; }
 
-        public bool Subscribed { get; set; }
+        public bool? Subscribed { get; set; }
 
-        public int UserNotesCount { get; set; }
+        public int? UserNotesCount { get; set; }
 
         public DateTime? DueDate { get; set; }
 
-        public bool Imported { get; set; }
+        public bool? Imported { get; set; }
 
         public string? ImportedFrom { get; set; }
 
@@ -56,9 +56,9 @@ namespace IssueManager.Domain.Entities.GitLab
 
         public GitLabTimeStats? TimeStats { get; set; }
 
-        public bool Confidential { get; set; }
+        public bool? Confidential { get; set; }
 
-        public bool DiscussionLocked { get; set; }
+        public bool? DiscussionLocked { get; set; }
 
         public string? IssueType { get; set; }
 
@@ -68,7 +68,7 @@ namespace IssueManager.Domain.Entities.GitLab
 
         public int? Weight { get; set; }
 
-        public bool HasTasks { get; set; }
+        public bool? HasTasks { get; set; }
 
         [JsonPropertyName("_links")]
         public GitLabLinks? Links { get; set; }

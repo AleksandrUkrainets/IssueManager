@@ -2,6 +2,6 @@
 {
     public class IssueUpdateRequest : IssueRequest
     {
-        public int IssueId { get; set; }
+        public int IssueNumber { get; set; }
     }
 }

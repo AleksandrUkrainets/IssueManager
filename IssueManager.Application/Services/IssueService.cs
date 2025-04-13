@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IssueManager.Application.Services
 {
-    public class IssueService(IIssueProviderFactory factory, IMapper mapper, ILogger<IssueService> logger) : IIssueService
+    public class IssueService(IIssueProviderFactory factory, ILogger<IssueService> logger) : IIssueService
     {
         private IIssueProvider? _issueProvider;
 
@@ -33,19 +33,19 @@ namespace IssueManager.Application.Services
         public async Task<IssueDto?> UpdateIssueAsync(IssueUpdateRequest request)
         {
             if (!await EnsureProviderInitializedAsync()) return null;
-            var issue = await _issueProvider!.UpdateIssueAsync(request.Repo, request.IssueId, request.Title, request.Body);
+            var issue = await _issueProvider!.UpdateIssueAsync(request.Repo, request.IssueNumber, request.Title, request.Body);
             if (issue == null) logger.LogWarning($"Failed to Update Issue {request.Title} for {request.Repo}");
 
-            logger.LogInformation("Updated issue {IssueId} in repo: {Repo}", request.IssueId, request.Repo);
+            logger.LogInformation("Updated issue {IssueId} in repo: {Repo}", request.IssueNumber, request.Repo);
             return issue;
         }
 
-        public async Task<bool> DeleteIssueAsync(string repo, int issueId)
+        public async Task<bool> DeleteIssueAsync(string repo, int issueNumber)
         {
             if (!await EnsureProviderInitializedAsync()) return false;
 
-            logger.LogInformation("Deleted issue {IssueId} in repo: {Repo}", issueId, repo);
-            return await _issueProvider!.DeleteIssueAsync(repo, issueId);
+            logger.LogInformation("Deleted issue {IssueId} in repo: {Repo}", issueNumber, repo);
+            return await _issueProvider!.DeleteIssueAsync(repo, issueNumber);
         }
     }
 }

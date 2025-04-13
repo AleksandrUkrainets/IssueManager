@@ -6,6 +6,6 @@ namespace IssueManager.Application.Interfaces
     {
         Task<IssueDto?> CreateIssueAsync(IssueRequest request);
         Task<IssueDto?> UpdateIssueAsync(IssueUpdateRequest request);
-        Task<bool> DeleteIssueAsync(string repo, int issueId);
+        Task<bool> DeleteIssueAsync(string repo, int issueNumber);
     }
 }

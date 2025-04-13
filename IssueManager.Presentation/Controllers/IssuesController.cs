@@ -25,9 +25,9 @@ namespace IssueManager.Presentation.Controllers
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteIssue([FromQuery] string repo, [FromQuery] int issueId)
+        public async Task<IActionResult> DeleteIssue([FromQuery] string repo, [FromQuery] int issueNumber)
         {
-            var result = await issueService.DeleteIssueAsync(repo, issueId);
+            var result = await issueService.DeleteIssueAsync(repo, issueNumber);
             return result ? Ok(new { isDeleted = result }) : NotFound(new { isDeleted = result });
         }
     }

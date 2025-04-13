@@ -25,7 +25,7 @@ namespace IssueManager.Infrastructure.Services
             return mapper.Map<IssueDto>(issue);
         }
 
-        public Task<bool> DeleteIssueAsync(string repo, int issueId) => Task.FromResult(false);
+        public Task<bool> DeleteIssueAsync(string repo, int issueNumber) => Task.FromResult(false);
     }
 
 }

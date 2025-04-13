@@ -8,8 +8,6 @@
 
         public required string AuthUrl { get; set; }
 
-        public required string TokenUrl { get; set; }
-
         public required string Scope { get; set; }
 
         public required string RedirectUri { get; set; }

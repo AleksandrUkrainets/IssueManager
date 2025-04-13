@@ -1,4 +1,5 @@
-﻿using IssueManager.Application.Interfaces;
+﻿using IssueManager.Application.DTOs;
+using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
@@ -43,7 +44,7 @@ namespace IssueManager.Application.Services
             return _provider!.GetAuthorizationUrl();
         }
 
-        public async Task<AuthTokenResult> SignIn(string code, string provider)
+        public async Task<AuthTokenDto> SignIn(string code, string provider)
         {
             if (!EnsureProviderInitialized(provider))
             {
