@@ -1,6 +1,6 @@
 ﻿using IssueManager.Application.Interfaces;
 using IssueManager.Domain.Interfaces;
-using IssueManager.Infrastructure.Services;
+using IssueManager.Infrastructure.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IssueManager.Infrastructure.Factories

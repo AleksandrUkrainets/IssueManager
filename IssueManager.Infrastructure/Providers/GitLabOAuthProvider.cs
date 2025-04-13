@@ -3,7 +3,7 @@ using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 using Microsoft.Extensions.Options;
 
-namespace IssueManager.Infrastructure.Services.OAuth
+namespace IssueManager.Infrastructure.Providers
 {
     public class GitLabOAuthProvider(IOptions<OAuthSettings> settings, IGitLabApiClient apiClient, IGitLabOAuthClient oAuthClient) : IOAuthProvider
     {

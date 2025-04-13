@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using IssueManager.Application.DTOs;
 using IssueManager.Application.Interfaces;
-using IssueManager.Domain.Entities.GitHub;
-using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 
-namespace IssueManager.Infrastructure.Services
+namespace IssueManager.Infrastructure.Providers
 {
     public class GitHubIssueProvider(IGitHubApiClient client, IMapper mapper, string accessToken) : IIssueProvider
     {

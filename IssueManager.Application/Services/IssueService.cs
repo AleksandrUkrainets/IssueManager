@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using IssueManager.Application.DTOs;
+﻿using IssueManager.Application.DTOs;
 using IssueManager.Application.Interfaces;
 using Microsoft.Extensions.Logging;
 

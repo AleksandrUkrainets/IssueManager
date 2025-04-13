@@ -3,23 +3,14 @@ using IssueManager.Domain.Interfaces;
 using IssueManager.Infrastructure.Clients;
 using Microsoft.Extensions.Options;
 
-namespace IssueManager.Infrastructure.Services.OAuth
+namespace IssueManager.Infrastructure.Providers
 {
-    public class GitHubOAuthProvider : IOAuthProvider
+    public class GitHubOAuthProvider(
+        IOptions<OAuthSettings> settings,
+        IGitHubOAuthClient oauthClient,
+        IGitHubApiClient apiClient) : IOAuthProvider
     {
-        private readonly OAuthProviderSettings _config;
-        private readonly IGitHubOAuthClient _oauthClient;
-        private readonly IGitHubApiClient _apiClient;
-
-        public GitHubOAuthProvider(
-            IOptions<OAuthSettings> settings,
-            IGitHubOAuthClient oauthClient,
-            IGitHubApiClient apiClient)
-        {
-            _config = settings.Value.Providers["github"];
-            _oauthClient = oauthClient;
-            _apiClient = apiClient;
-        }
+        private readonly OAuthProviderSettings _config = settings.Value.Providers["github"];
 
         public string GetAuthorizationUrl()
         {
@@ -40,7 +31,7 @@ namespace IssueManager.Infrastructure.Services.OAuth
         {
             try
             {
-                var response = await _oauthClient.ExchangeCodeForTokenAsync(new Dictionary<string, string>
+                var response = await oauthClient.ExchangeCodeForTokenAsync(new Dictionary<string, string>
             {
                 { "client_id", _config.ClientId },
                 { "client_secret", _config.ClientSecret },
@@ -60,7 +51,7 @@ namespace IssueManager.Infrastructure.Services.OAuth
         {
             try
             {
-                var user = await _apiClient.GetUserAsync($"Bearer {accessToken}");
+                var user = await apiClient.GetUserAsync($"Bearer {accessToken}");
                 return user.Id.ToString();
             }
             catch

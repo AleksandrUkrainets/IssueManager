@@ -7,15 +7,8 @@ using System.Text;
 
 namespace IssueManager.Application.Services
 {
-    public class TokenGenerator : ITokenGenerator
+    public class TokenGenerator(IConfiguration configuration) : ITokenGenerator
     {
-        private readonly IConfiguration _configuration;
-
-        public TokenGenerator(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
         public string GenerateJwtToken(string provider, string accessToken, string appUserId)
         {
             var claims = new[]
@@ -25,12 +18,12 @@ namespace IssueManager.Application.Services
                 new Claim(ClaimTypes.NameIdentifier, appUserId)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: configuration["Jwt:Issuer"],
+                audience: configuration["Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds
