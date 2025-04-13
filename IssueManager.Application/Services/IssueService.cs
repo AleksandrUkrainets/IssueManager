@@ -27,7 +27,7 @@ namespace IssueManager.Application.Services
             if (issue == null) logger.LogWarning($"Failed to Create Issue {request.Title} for {request.Repo}");
 
             logger.LogInformation("Created issue in repo: {Repo}", request.Repo);
-            return mapper.Map<IssueDto>(issue);
+            return issue;
         }
 
         public async Task<IssueDto?> UpdateIssueAsync(IssueUpdateRequest request)
@@ -37,7 +37,7 @@ namespace IssueManager.Application.Services
             if (issue == null) logger.LogWarning($"Failed to Update Issue {request.Title} for {request.Repo}");
 
             logger.LogInformation("Updated issue {IssueId} in repo: {Repo}", request.IssueId, request.Repo);
-            return mapper.Map<IssueDto>(issue);
+            return issue;
         }
 
         public async Task<bool> DeleteIssueAsync(string repo, int issueId)
